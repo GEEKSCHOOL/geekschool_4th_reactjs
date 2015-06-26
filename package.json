@@ -1,0 +1,37 @@
+{
+  "name": "geekschool_4th_reactjs",
+  "version": "0.0.0",
+  "description": "",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/GEEKSCHOOL/geekschool_4th_reactjs.git"
+  },
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/GEEKSCHOOL/geekschool_4th_reactjs/issues"
+  },
+  "homepage": "https://github.com/GEEKSCHOOL/geekschool_4th_reactjs",
+  "dependencies": {
+    "react": "^0.13.3"
+  },
+  "devDependencies": {
+    "browserify": "^10.2.4",
+    "reactify": "^1.1.1",
+    "live-server": "^0.7.1",
+    "watchify": "^3.2.2",
+    "todomvc-app-css": "^1.0.0",
+    "todomvc-common": "^1.0.1"
+  },
+  "scripts": {
+    "dev": "watchify js/app.js -v -o bundle.js",
+    "server": "live-server --port=3303",
+    "start": "npm run dev & npm run server"
+  },
+  "browserify": {
+    "transform": [
+      "reactify"
+    ]
+  }
+}
