@@ -2,7 +2,7 @@
 
 [TodoMVC](http://todomvc.com/) サンプルアプリを[React](http://facebook.github.io/react/)を使って段階的に学習できます。
 
-livereloadされますのでコードを書き保存しながら進められますのでコードに集中できます。
+livereloadされますのでコードを書き保存しながら進められます。
 
 [資料](http://geekschool.github.io/geekschool_4th_reactjs)
 
