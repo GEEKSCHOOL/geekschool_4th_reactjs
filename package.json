@@ -28,7 +28,7 @@
     "dev": "watchify js/app.js -v -o bundle.js",
     "server": "live-server --port=3303",
     "start": "npm run dev & npm run server",
-    "windows": "start cmd /c npm run dev & start cmd /c run server"
+    "windows": "start cmd /c npm run dev & start cmd /c npm run server"
   },
   "browserify": {
     "transform": [
