@@ -1,0 +1,21 @@
+section.custom .fragment.push-out {
+    display: inline;
+    opacity: 1;
+    visibility: initial;
+}
+
+section.custom .fragment.push-out.visible {
+    display: none;
+}
+
+section.custom .fragment.push-in {
+    display: none;
+}
+
+section.custom .fragment.push-in.visible {
+    display: inline;
+}
+
+.reveal .highlight pre code {
+  max-height: 900px;
+}

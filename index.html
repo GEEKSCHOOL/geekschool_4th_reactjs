@@ -1,0 +1,1112 @@
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>GeekSchool Javascript React.jsハンズオン</title>
+    <link rel="shortcut icon" href="favicon.png">
+    <meta name="description" content="A framework for easily creating beautiful presentations using HTML">
+    <meta name="author" content="Hakim El Hattab">
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+    <link rel="stylesheet" href="css/reveal.css">
+    <link rel="stylesheet" href="css/custom.css">
+    <link rel="stylesheet" href="css/code_custom.css">
+    <link rel="stylesheet" href="css/theme/black.css" id="theme">
+    <!-- Code syntax highlighting -->
+    <!-- <link rel="stylesheet" href="lib/css/zenburn.css"> -->
+    <!-- Printing and PDF exports -->
+    <!-- <script>
+    var link = document.createElement('link');
+    link.rel = 'stylesheet';
+    link.type = 'text/css';
+    link.href = window.location.search.match(/print-pdf/gi) ? 'css/print/pdf.css' : 'css/print/paper.css';
+    document.getElementsByTagName('head')[0].appendChild(link);
+    </script> -->
+    <!--[if lt IE 9]>
+		<script src="lib/js/html5shiv.js"></script>
+		<![endif]-->
+</head>
+
+<body>
+    <div class="reveal">
+        <!-- Any section element inside of this container is displayed as a slide -->
+        <div class="slides">
+            <section>
+                <section>
+                    <h1>GeekSchool</h1>
+                    <h3>javascript</h3>
+                    <p>
+                        <small>Created by <a href="http://www.atware.co.jp">atWare</a></small>
+                    </p>
+                </section>
+                <section data-transition="slide" data-background="#4d7e65" data-background-transition="zoom">
+                    <h2>はじめに</h2>
+                </section>
+                <section data-transition="slide" data-background="#4d7e65" data-background-transition="zoom">
+                    <p>React.jsを使ってtodoアプリを作っていきます。</p>
+                </section>
+                <section>
+                    <img width="800" height="500" src="img/todosimg.png">
+                    <small>参考：<a href="http://todomvc.com/">http://todomvc.com/</a></small>
+                </section>
+                <section data-transition="slide" data-background="#4d7e65" data-background-transition="zoom">
+                    <h2>準備</h2>
+                    <ol>
+                        <li>nodeインストール</li>
+                        <li>環境作成</li>
+                    </ol>
+                </section>
+                <section data-state="customevent">
+                    <h2>nodeのインストール</h2>
+                    <h4>Mac</h4>
+                    <pre><code class="Bash" data-trim contenteditable style="font-size: 18px;">
+http://brew.sh/index_ja.html
+上記サイトを参考にhomebrewをインストール
+brew update
+brew install nodebrew
+nodebrew install latest
+					</code></pre>
+                    <h4>Windows</h4>
+                    <pre><code class="Bash" data-trim contenteditable style="font-size: 18px;">
+https://nodejs.org/
+インストーラーをダウンロード
+Node.jsのインストールを完了させる
+					</code></pre>
+                </section>
+                <section>
+                    <h3>環境作成①</h3>
+                    <pre><code class="Bash" data-trim contenteditable style="font-size: 18px;">
+npm init
+                    </code></pre>
+                    <pre><code class="Bash" data-trim contenteditable style="font-size: 18px;">
+npm i react browserify reactify live-server watchify todomvc-app-css@1.0.0 todomvc-common@1.0.1 --save-dev
+                    </code></pre>
+                    <pre><code class="Bash" data-trim contenteditable style="font-size: 18px;">
+  "scripts": {
+    "dev": "watchify js/app.js -v -o bundle.js",
+    "server": "live-server --port=3303",
+    "start": "npm run dev & npm run server",
+    "windows": "start cmd /c npm run dev & start cmd /c npm run server"
+  },
+  "browserify": {
+    "transform": [
+      "reactify"
+    ]
+  }
+                    </code></pre>
+                </section>
+                <section>
+                    <h3>環境作成②</h3>
+                    <pre><code class="Bash" data-trim contenteditable style="font-size: 18px;">
+jsフォルダの作成
+                    </code></pre>
+                    <pre><code class="Bash" data-trim contenteditable style="font-size: 18px;">
+index.htmlの作成
+                    </code></pre>
+                </section>
+                <section>
+                    <h3>環境作成③</h3>
+                    <div class="highlight"><pre><code class="language-javascript" data-lang="javascript" style="font-size: 18px;">&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+
+&lt;head&gt;
+    &lt;meta charset="utf-8"&gt;
+    &lt;meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no"&gt;
+    &lt;link rel="shortcut icon" href="favicon.png"&gt;
+    &lt;title&gt;GeekSchool Javascript&lt;/title&gt;
+    &lt;meta name="description" content="GeekSchool in atWare."&gt;
+    &lt;meta name="keywords" content="GeekSchool in atWare, javascript"&gt;
+    &lt;link rel="stylesheet" href="/node_modules/todomvc-common/base.css"&gt;
+    &lt;link rel="stylesheet" href="/node_modules/todomvc-app-css/index.css"&gt;
+&lt;/head&gt;
+
+&lt;body&gt;
+    &lt;div id="todoapp"&gt;&lt;/div&gt;
+        &lt;header id="header"&gt;
+            &lt;h1&gt;todos&lt;/h1&gt;
+            &lt;input id="new-todo" placeholder="What needs to be done?" /&gt;
+        &lt;/header&gt;
+        &lt;section id="main"&gt;
+            &lt;input id="toggle-all" type="checkbox" checked="checked" /&gt;
+            &lt;ul id="todo-list"&gt;
+                &lt;li&gt;
+                    &lt;div class="view"&gt;
+                        &lt;input class="toggle" type="checkbox" /&gt;
+                        &lt;label&gt;洗濯&lt;/label&gt;
+                        &lt;button class="destroy" /&gt;
+                    &lt;/div&gt;
+                &lt;/li&gt;
+                &lt;li class="completed"&gt;
+                    &lt;div class="view"&gt;
+                        &lt;input class="toggle" type="checkbox" checked="checked" /&gt;
+                        &lt;label&gt;掃除&lt;/label&gt;
+                        &lt;button class="destroy" /&gt;
+                    &lt;/div&gt;
+                &lt;/li&gt;
+            &lt;/ul&gt;
+        &lt;/section&gt;
+        &lt;footer id="footer"&gt;
+            &lt;span id="todo-count"&gt;
+          &lt;strong&gt;1&lt;/strong&gt; item left
+        &lt;/span&gt;
+            &lt;button id="clear-completed"&gt;
+                Clear completed (1)
+            &lt;/button&gt;
+        &lt;/footer&gt;
+    &lt;/div&gt;
+&lt;/body&gt;
+
+&lt;/html&gt;
+</code></pre></div>
+                </section>
+                <section>
+                    <h3>でもこちらをcloneすると楽です。</h3>
+                    <pre><code class="Bash" data-trim contenteditable style="font-size: 18px;">
+https://github.com/GEEKSCHOOL/geekschool_4th_reactjs.git
+                    </code></pre>
+                </section>
+                <section>
+                    <h2>表示してみる</h2>
+                    <pre><code class="Bash" data-trim contenteditable style="font-size: 18px;">
+npm run server
+                    </code></pre>
+                    <small>macでもしエラーが出たら</small>
+                    <pre><code class="Bash" data-trim contenteditable style="font-size: 18px;">
+ulimit -n 1024
+                    </code></pre>
+                </section>
+
+                <section data-transition="slide" data-background="#4d7e65" data-background-transition="zoom">
+                    <h2>ステップ１</h2>
+                    <h3>モックからコンポーネントを階層化</h3>
+                </section>
+                <section class="present custom" style="top: -331px; display: block;">
+                    <h2>コンポーネント階層化</h2>
+                    <!-- <h2>Component Hierarchy</h2> -->
+                    <ul>
+                        <div style="float: right">
+                            <img src="img/todosimg.png" width="500" class="fragment push-out" data-fragment-index="70" />
+                            <img src="img/todosimg2.png" width="500" class="fragment push-in" data-fragment-index="70" />
+                        </div>
+                        <li><b>全体</b></li>
+                        <li class="fragment" data-fragment-index="70"><b>Header </b> <em>component</em>（青）</li>
+                        <li class="fragment" data-fragment-index="70"><b>Main,表示行 </b> <em>component</em>（赤）</li>
+                        <li class="fragment" data-fragment-index="70"><b>Footer </b> <em>component</em>（緑）</li>
+                </section>
+                <section data-transition="slide">
+                    <h4>便利</h4>
+                    <ul>
+                        <li><a href="https://github.com/reactjs/sublime-react">sublime-react</a></li>
+                    </ul>
+                </section>
+                <section>
+                    <h2><em>component</em>の作成</h2>
+                    <p>componentを表示するapp.jsを作成する</p>
+                    <img src="img/appjs.png" width="600px">
+                    <ul>
+                        <li>jsフォルダを作成</li>
+                        <li>js/app.jsファイルを作成</li>
+                        <li>js/app.jsにコード記入</li>
+                    </ul>
+                </section>
+                <section>
+                    <div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="kd">var</span> React = require('react');
+
+<span class="kd">var</span> Todo = require('./components/TodoApp.jsx');
+
+// <span class="o">&lt;</span>Todo <span class="o">/&gt;</span> と同じ
+// http://facebook.github.io/react/jsx-compiler.html
+React.render(
+  React.createElement(Todo, null),
+  document.getElementById('todoapp')
+);
+</code></pre></div>
+                </section>
+                <section>
+                    <p><em>component</em>を管理するのTodoApp.jsxを作成する</p>
+                    <img src="img/todoapp1.png" width="600px">
+                </section>
+                <section>
+                    <div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="kd">var</span> Header = require('./Header.jsx');
+<span class="kd">var</span> MainSection = require('./MainSection.jsx');
+<span class="kd">var</span> Footer = require('./Footer.jsx');
+<span class="kd">var</span> React = require('react');
+
+<span class="kd">var</span> TodoApp = React.createClass({
+  render<span class="o">:</span> <span class="kd">function</span>() {
+    <span class="k">return</span> (
+      <span class="o">&lt;</span>div<span class="o">&gt;</span>
+        <span class="o">&lt;</span>Header <span class="o">/&gt;</span>
+        <span class="o">&lt;</span>MainSection <span class="o">/&gt;</span>
+        <span class="o">&lt;</span>Footer <span class="o">/&gt;</span>
+      <span class="o">&lt;/</span>div<span class="o">&gt;</span>
+    );
+  }
+});
+
+module.exports = TodoApp;
+</code></pre></div>
+                </section>
+                <section>
+                    <p>Header.jsxを作成する</p>
+                    <ul>
+                        <li>componentsフォルダを作成</li>
+                        <li>js/header.jsxファイルを作成</li>
+                        <li>js/header.jsxにコード記入</li>
+                        <li>index.htmlのheaderタグを切り取り、renderに貼り付ける</li>
+                    </ul>
+                    <img src="img/header1.png" width="600px">
+                </section>
+                <section>
+                    <div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="kd">var</span> React = require('react');
+
+<span class="kd">var</span> Header = React.createClass({
+
+  render<span class="o">:</span> <span class="kd">function</span>() {
+    <span class="k">return</span> (
+      <span class="o">&lt;</span>header id="header"<span class="o">&gt;</span>
+          <span class="o">&lt;</span>h1<span class="o">&gt;</span>todos<span class="o">&lt;/</span>h1<span class="o">&gt;</span>
+          <span class="o">&lt;</span>input id="new-todo" placeholder="What needs to be done?" <span class="o">/&gt;</span>
+      <span class="o">&lt;/</span>header<span class="o">&gt;</span>
+    );
+  }
+});
+
+module.exports = Header;
+</code></pre></div>
+                </section>
+                <section>
+                    <p>MainSection.jsxを作成する</p>
+                    <ul>
+                        <li>js/MainSection.jsxファイルを作成</li>
+                        <li>js/MainSection.jsxにコード記入</li>
+                        <li>index.htmlのsectionタグを切り取り、renderに貼り付ける</li>
+                    </ul>
+                    <img src="img/mainsection1.png" width="400px">
+                </section>
+                <section>
+                    <div class="highlight" style="margin-top: -70px;"><pre><code class="language-javascript" data-lang="javascript" style="font-size: 18px;"><span class="kd">var</span> React = require('react');
+<span class="kd">var</span> TodoItem = require('./TodoItem.jsx');
+
+<span class="kd">var</span> MainSection = React.createClass({
+
+  render<span class="o">:</span> <span class="kd">function</span>() {
+    <span class="k">return</span> (
+      <span class="o">&lt;</span>section id="main"<span class="o">&gt;</span>
+          <span class="o">&lt;</span>input id="toggle-all" type="checkbox" checked="checked" <span class="o">/&gt;</span>
+          <span class="o">&lt;</span>ul id="todo-list"<span class="o">&gt;</span>
+            <span class="o">&lt;</span>TodoItem <span class="o">/&gt;</span>
+          <span class="o">&lt;/</span>ul<span class="o">&gt;</span>
+      <span class="o">&lt;/</span>section<span class="o">&gt;</span>
+    );
+  }
+
+});
+
+module.exports = MainSection;
+</code></pre></div>
+                </section>
+                <section>
+                    <p>TodoItem.jsxを作成する</p>
+                    <ul>
+                        <li>js/TodoItem.jsxファイルを作成</li>
+                        <li>js/TodoItem.jsxにコード記入</li>
+                        <li>MainSection.jsxのliタグを切り取り、renderに貼り付ける</li>
+                        <li>classをclassNameに変更</li>
+                    </ul>
+                    <img src="img/todoitem1.png" width="500px">
+                </section>
+                <section>
+                    <div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="kd">var</span> React = require('react');
+
+<span class="kd">var</span> TodoItem = React.createClass({
+
+  render<span class="o">:</span> <span class="kd">function</span>() {
+    <span class="k">return</span> (
+      <span class="o">&lt;</span>li<span class="o">&gt;</span>
+          <span class="o">&lt;</span>div className="view"<span class="o">&gt;</span>
+              <span class="o">&lt;</span>input <span class="kd">className</span>="toggle" type="checkbox" <span class="o">/&gt;</span>
+              <span class="o">&lt;</span>label<span class="o">&gt;</span>洗濯<span class="o">&lt;/</span>label<span class="o">&gt;</span>
+              <span class="o">&lt;</span>button <span class="kd">className</span>="destroy" <span class="o">/&gt;</span>
+          <span class="o">&lt;/</span>div<span class="o">&gt;</span>
+      <span class="o">&lt;/</span>li<span class="o">&gt;</span>
+    );
+  }
+});
+
+module.exports = TodoItem;
+</code></pre></div>
+                </section>
+                <section>
+                    <p>Footer.jsxを作成する</p>
+                    <ul>
+                        <li>js/Footer.jsxファイルを作成</li>
+                        <li>js/Footer.jsxにコード記入</li>
+                        <li>index.htmlのfooterタグを切り取り、renderに貼り付ける</li>
+                    </ul>
+                    <img src="img/footer1-1.png" width="600px">
+                </section>
+                <section>
+                    <div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="kd">var</span> React = require('react');
+
+<span class="kd">var</span> Footer = React.createClass({
+
+  render<span class="o">:</span> <span class="kd">function</span>() {
+    <span class="k">return</span> (
+      <span class="o">&lt;</span>footer id="footer"<span class="o">&gt;</span>
+          <span class="o">&lt;</span>span id="todo-count"<span class="o">&gt;</span><span class="o">&lt;</span>strong<span class="o">&gt;</span>1<span class="o">&lt;/</span>strong<span class="o">&gt;</span> item left<span class="o">&lt;/</span>span<span class="o">&gt;</span>
+          <span class="o">&lt;</span>button id="clear-completed"<span class="o">&gt;</span>
+              Clear completed (1)
+          <span class="o">&lt;/</span>button<span class="o">&gt;</span>
+      <span class="o">&lt;/</span>footer<span class="o">&gt;</span>
+
+    );
+  }
+});
+
+module.exports = Footer;
+</code></pre></div>
+                </section>
+                <section>
+                    <p>index.htmlを編集し実行</p>
+                    <ul>
+                        <li>index.htmlにscriptタグを追加する</li>
+                    </ul>
+                    <img src="img/index1.png" width="600px">
+                    <h4>実行</h4>
+                    <pre><code class="Bash" data-trim contenteditable style="font-size: 18px;">
+npm start
+                    </code></pre>
+                </section>
+                <section data-transition="slide" data-background="#4d7e65" data-background-transition="zoom">
+                    <h2>ステップ２</h2>
+                    <h3>入力したものを表示する</h3>
+                </section>
+                <section data-transition="slide" data-background="#4d7e65" data-background-transition="zoom">
+                    <h2>その前にデータの流れは？</h2>
+                    <img src="img/componenthierarchy1.png" width="600px">
+                </section>
+                <section>
+                    <h2>Headerのにイベント追加</h2>
+                    <div class="highlight"><pre><code class="language-javascript" data-lang="javascript">  render<span class="o">:</span> <span class="kd">function</span>() {
+    <span class="k">return</span> (
+      <span class="o">&lt;</span>header id="header"<span class="o">&gt;</span>
+        <span class="o">&lt;</span>h1<span class="o">&gt;</span>todos<span class="o">&lt;/</span>h1<span class="o">&gt;</span>
+        <span class="o">&lt;</span>input id="new-todo" placeholder="What needs to be done?"
+<span class="hll">          onKeyDown={this._onKeyDown}
+</span>          autoFocus={true} <span class="o">/&gt;</span>
+      <span class="o">&lt;/</span>header<span class="o">&gt;</span>
+    );
+  },
+
+</code></pre></div>
+                </section>
+                <section>
+                    <h2>KeyDownイベント処理</h2>
+                    <div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="hll"><span class="kd">var</span> ENTER_KEY_CODE = 13; // エンターキー
+</span></code></pre></div>
+                    <p>MainSectionの親のTodoAppにデータを渡す</p>
+                    <div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="hll">  },
+
+  _onKeyDown<span class="o">:</span> <span class="kd">function</span>(event) {
+    <span class="o">if</span> (ENTER_KEY_CODE <span class="o">===</span> event.keyCode && event.target.value) {
+      <span class="k">this</span>.props.onSave(event.target.value);
+    }
+  }
+</span></code></pre></div>
+                </section>
+                <section>
+                    <h2>イベントの処理は親でやる</h2>
+                    <div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="c1">// TodoApp.jsx
+</span>  render<span class="o">:</span> <span class="kd">function</span>() {
+    <span class="k">return</span> (
+      <span class="o">&lt;</span>div<span class="o">&gt;</span>
+        <span class="o">&lt;</span>Header
+<span class="hll">          onSave={this._onSave} <span class="o">/&gt;</span>
+</span>        <span class="o">&lt;</span>MainSection <span class="o">/&gt;</span>
+        <span class="o">&lt;</span>Footer <span class="o">/&gt;</span>
+      <span class="o">&lt;/</span>div<span class="o">&gt;</span>
+    );
+  },
+<span class="hll">  _onSave<span class="o">:</span> <span class="kd">function</span>(text) {}
+</span></code></pre></div>
+                </section>
+                <section>
+                    <h3>子でのイベントを親でハンドリング</h3>
+                    <div style="float: right">
+                        <img src="img/componenthierarchy1.png" width="400" />
+                    </div>
+                    <div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="c1">// Header.jsx
+</span>  _onKeyDown<span class="o">:</span> <span class="kd">function</span>(event) {
+    <span class="o">if</span> (ENTER_KEY_CODE <span class="o">===</span> event.keyCode
+             && event.target.value) {
+<span class="hll">      <span class="k">this</span>.props.onSave(event.target.value);
+</span>    }
+  }
+</code></pre>
+<pre><code class="language-javascript" data-lang="javascript"><span class="c1">// TodoApp.jsx
+</span>  <span class="k">return</span><span class="o">:</span> <span class="kd">function</span>() {
+    <span class="k">return</span> (
+      <span class="o">&lt;</span>div<span class="o">&gt;</span>
+        <span class="o">&lt;</span>Header
+<span class="hll">          onSave={<span class="k">this</span>._onSave} <span class="o">/&gt;</span>
+</span>        <span class="o">&lt;</span>MainSection <span class="o">/&gt;</span>
+        <span class="o">&lt;</span>Footer <span class="o">/&gt;</span>
+      <span class="o">&lt;/</span>div<span class="o">&gt;</span>
+    );
+  },
+<span class="hll">  _onSave<span class="o">:</span> <span class="kd">function</span>(text) {}
+</span></code></pre></div>
+                </section>
+                <section>
+                    <h3>データ保存の変数を作成</h3>
+                    <div class="highlight">
+<pre><code class="language-javascript" data-lang="javascript"><span class="c1">黒い画面で
+</span>npm install immutable --save-dev
+</code></pre><pre><code class="language-javascript" data-lang="javascript"><span class="c1">// TodoApp.jsx
+</span><span class="kd">var</span> Immutable = require('immutable');
+
+<span class="kd">var</span> _todos = Immutable.OrderedMap();
+</code></pre></div>
+                </section>
+                <section>
+                    <h3>データを保存する</h3>
+                    <div class="highlight">
+<pre><code class="language-javascript" data-lang="javascript"><span class="hll"><span class="c1">// TodoApp.jsx
+/**
+ * todoデータを作成。idは0-9a-zの36文字で表現された8文字
+ */
+</span><span class="kd">function</span> create (text) {
+  <span class="kd">var</span> id = (+new Date() + Math.floor(Math.random() * 999999)).toString(36);
+  _todos = _todos.set(id, {id:id, text:text}).sort();
+}
+</span></code></pre><pre><code class="language-javascript" data-lang="javascript"><span class="c1">// TodoApp.jsx
+</span>  _onSave:<span class="o">:</span> <span class="kd">function</span>(text) {
+<span class="hll">    create(text);
+</span>  }
+</code></pre></div>
+                </section>
+                <section>
+                    <h3>データをMainSectionに渡す</h3>
+                    <p>親がStateを、子にPropとして渡す</p>
+                    <div class="highlight">
+<pre><code class="language-javascript" data-lang="javascript"><span class="c1">// TodoApp.jsx
+</span><span class="hll">  getInitialState<span class="o">:</span> <span class="kd">function</span>() {
+    <span class="k">return</span> {
+      allTodos<span class="o">:</span> _todos
+    };
+  },
+  </span></code></pre><pre><code class="language-javascript" data-lang="javascript">          onSave={<span class="k">this</span>._onSave} <span class="o">/&gt;</span>
+        <span class="o">&lt;</span>MainSection
+<span class="hll">          allTodos={<span class="k">this</span>.state.allTodos} <span class="o">/&gt;</span>
+</span>        <span class="o">&lt;</span>Footer <span class="o">/&gt;</span>
+      <span class="o">&lt;/</span>div<span class="o">&gt;</span>
+</code></pre><pre><code class="language-javascript" data-lang="javascript">  _onSave<span class="o">:</span> <span class="kd">function</span>(text) {
+    create(text);
+<span class="hll">    <span class="k">this</span>.setState({
+      allTodos<span class="o">:</span> _todos
+    })
+</span>  }
+</code></pre></div>
+                </section>
+                <section>
+                    <h3>itemを複数作成する</h3>
+                    <div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="c1">// MainSection.jsx
+</span>  render<span class="o">:</span> <span class="kd">function</span>() {
+<span class="hll"><span class="c1">    // propsにtodoがなければ表示しない
+</span>    <span class="o">if</span> (<span class="k">this</span>.props.allTodos.size <span class="o">&lt;</span> 1) {
+      <span class="k">return</span> null;
+    }
+<span class="c1">    // mapはlistのすべての要素を操作関数でマッピングし、新しい配列を作る
+    // keyはVirtualDOMのdiffから実際のDOMに反映させるときに最小限の変更にするため
+</span>    <span class="kd">var</span> allTodos = <span class="k">this</span>.props.allTodos.toArray();
+    <span class="kd">var</span> todos = allTodos.map(<span class="kd">function</span>(todo) {
+      <span class="k">return</span> <span class="o">&lt;</span>TodoItem key={todo.id} todo={todo} <span class="o">/&gt;</span>;
+    })
+</span>    <span class="k">return</span> (
+      <span class="o">&lt;</span>section id="main"<span class="o">&gt;</span>
+          <span class="o">&lt;</span>input id="toggle-all" type="checkbox" <span class="o">/&gt;</span>
+<span class="hll">          <span class="o">&lt;</span>ul id="todo-list"<span class="o">&gt;</span>{todos}<span class="o">&lt;/</span>ul<span class="o">&gt;</span>
+</span>      <span class="o">&lt;/</span>section<span class="o">&gt;</span>
+    );
+  }
+</code></pre></div>
+                </section>
+                <section>
+                    <h3>TodoItemを表示する</h3>
+                    <div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="c1">// TodoItem.jsx
+</span>  render<span class="o">:</span> <span class="kd">function</span>() {
+    <span class="k">return</span> (
+      <span class="o">&lt;</span>li<span class="o">&gt;</span>
+          <span class="o">&lt;</span>div className="view"<span class="o">&gt;</span>
+              <span class="o">&lt;</span>input className="toggle" type="checkbox" <span class="o">/&gt;</span>
+<span class="hll">              <span class="o">&lt;</span>label<span class="o">&gt;</span>{<span class="k">this</span>.props.todo.text}<span class="o">&lt;/</span>label<span class="o">&gt;</span>
+</span>              <span class="o">&lt;</span>button className="destroy" <span class="o">/&gt;</span>
+          <span class="o">&lt;</span>/div<span class="o">&gt;</span>
+      <span class="o">&lt;/</span>li<span class="o">&gt;</span>
+    );
+  }
+</code></pre></div>
+                </section>
+                <section data-transition="slide">
+                    <h2>確認してみましょう</h2>
+                    <h3>表示されましたか？</h3>
+                </section>
+                <!-- ステップ３ -->
+                <section data-transition="slide" data-background="#4d7e65" data-background-transition="zoom">
+                    <h2>ステップ３</h2>
+                    <h3>入力フィールドを消してみる</h3>
+                </section>
+                <section data-transition="slide" data-background="#4d7e65" data-background-transition="zoom">
+                    <h3>仕様</h3>
+                    <ol>
+                        <li>setStateで入力フィールドをrerender</li>
+                    </ol>
+                </section>
+                <section data-transition="slide" data-background="#4d7e65" data-background-transition="zoom">
+                    <h2>その前にデータの流れは？</h2>
+                    <img src="img/componenthierarchy2.png" width="600px">
+                </section>
+                <section>
+                    <div class="highlight">
+<pre><code class="language-javascript" data-lang="javascript"><span class="c1">// Header.jsx
+</span><span class="hll">  getInitialState<span class="o">:</span> <span class="kd">function</span>() {
+    <span class="k">return</span> {value<span class="o">:</span> ''};
+  },</span></code></pre><pre><code class="language-javascript" data-lang="javascript">        <span class="o">&lt;</span>input id="new-todo" placeholder="What needs to be done?"
+          onKeyDown={<span class="k">this</span>._onKeyDown}
+<span class="hll">          onChange={<span class="k">this</span>._onChange}
+          value={<span class="k">this</span>.state.value}
+</span>          autoFocus={true} <span class="o">/&gt;</span>
+</code></pre><pre><code class="language-javascript" data-lang="javascript"><span class="hll">  _onChange<span class="o">:</span> <span class="kd">function</span>(event) {
+    <span class="k">this</span>.setState({
+      value<span class="o">:</span> event.target.value
+    });
+  },
+</span></code></pre><pre><code class="language-javascript" data-lang="javascript">  _onKeyDown<span class="o">:</span> <span class="kd">function</span>(event) {
+    if (ENTER_KEY_CODE <span class="o">===</span> event.keyCode && event.target.value) {
+      <span class="k">this</span>.props.onSave(event.target.value);
+<span class="hll">      <span class="k">this</span>.setState({value<span class="o">:</span>''});
+</span>    }
+  }
+</code></pre></div>
+                </section>
+                <!-- ステップ４ -->
+                <section data-transition="slide" data-background="#4d7e65" data-background-transition="zoom">
+                    <h2>ステップ４</h2>
+                    <h3>表示したものを消してみる</h3>
+                </section>
+                <section data-transition="slide" data-background="#4d7e65" data-background-transition="zoom">
+                    <h3>仕様</h3>
+                    <ol>
+                        <li>TodoAppで管理しているデータを削除</li>
+                        <li>setStateでrerender</li>
+                    </ol>
+                </section>
+                <section>
+                    <div style="float: right">
+                        <img src="img/componenthierarchy3.png" width="400" />
+                    </div>
+                    <div class="highlight"><pre><code class="language-javascript" data-lang="javascript" style="font-size: 18px;"><span class="c1">// TodoItem.jsx
+</span>    <span class="o">&lt;</span>label<span class="o">&gt;</span>{<span class="k">this</span>.props.todo.text}<span class="o">&lt;/</span>label<span class="o">&gt;</span>
+    <span class="o">&lt;</span>button className="destroy"
+<span class="hll">       onClick={<span class="k">this</span>._onDestroyClick} <span class="o">/&gt;</span>
+</span><span class="o">&lt;/</span>div<span class="o">&gt;</span>
+</code></pre>
+<pre><code class="language-javascript" data-lang="javascript"><span class="hll">  _onDestroyClick<span class="o">:</span> <span class="kd">function</span>() {
+    <span class="k">this</span>.props.destroy(<span class="k">this</span>.props.todo.id);
+  }
+</span></code></pre>
+<pre><code class="language-javascript" data-lang="javascript" style="font-size: 18px;"><span class="c1">// MainSectionjsx
+</span>    <span class="kd">var</span> todos = todoArray.map(<span class="kd">function</span>(todo) {
+      <span class="k">return</span> <span class="o">&lt;</span>TodoItem key={todo.id} todo={todo}
+<span class="hll">              destroy={<span class="k">this</span>._destroy} <span class="o">/&gt;</span>
+    }, <span class="k">this</span>);
+</span></code></pre><pre><code class="language-javascript" data-lang="javascript" style="font-size: 18px;"><span class="c1">// MainSectionjsx
+</span><span class="hll">  _destroy<span class="o">:</span> <span class="kd">function</span>(key) {
+    <span class="k">this</span>.props.destroy(key);
+  },
+</span></code></pre></div>
+                </section>
+                <section>
+                    <div style="float: right">
+                        <img src="img/componenthierarchy3.png" width="400" />
+                    </div>
+                    <div class="highlight"><pre><code class="language-javascript" data-lang="javascript" style="font-size: 18px;"><span class="c1">// TodoApp.jsx
+</span>  <span class="o">&lt;</span>MainSection
+    allTodos={<span class="k">this</span>.state.allTodos}
+<span class="hll">    destroy={<span class="k">this</span>._destroy} <span class="o">/&gt;</span>
+</span>  <span class="o">&lt;</span>Footer <span class="o">/&gt;</span>
+</code></pre><pre><code class="language-javascript" data-lang="javascript" style="font-size: 18px;">  },
+  _destroy<span class="o">:</span> <span class="kd">function</span>(key) {
+<span class="hll">    _todos = _todos.delete(key)
+    <span class="k">this</span>.setState({
+      allTodos: _todos
+    });
+  }
+</span></code></pre></div>
+                </section>
+                <!-- ステップ５ -->
+                <section data-transition="slide" data-background="#4d7e65" data-background-transition="zoom">
+                    <h2>ステップ５</h2>
+                    <h3>completeの表示、非表示</h3>
+                </section>
+                <section data-transition="slide" data-background="#4d7e65" data-background-transition="zoom">
+                    <h3>仕様</h3>
+                    <ol>
+                        <li>completeしたものを保存</li>
+                        <li>htmlのclass名を変える</li>
+                    </ol>
+                </section>
+                <section>
+                    <div class="highlight"><pre><code class="language-javascript" data-lang="javascript" style="font-size: 18px;"><span class="c1">// TodoItem.jsx
+</span>  render<span class="o">:</span> <span class="kd">function</span>() {
+<span class="hll">    var todo = <span class="k">this</span>.props.todo;
+    var className = todo.complete ? 'completed' : ''
+</span>    <span class="k">return</span> (
+<span class="hll">      <span class="o">&lt;</span>li className={className}<span class="o">&gt;</span>
+</span>          <span class="o">&lt;</span>div className="view"<span class="o">&gt;</span>
+              <span class="o">&lt;</span>input className="toggle" type="checkbox"
+<span class="hll">                      onChange={<span class="k">this</span>._onToggleComplete} <span class="o">/&gt;</span>
+</span>              <span class="o">&lt;</span>label<span class="o">&gt;</span>{<span class="k">this</span>.props.todo.text}<span class="o">&lt;</span>/label<span class="o">&gt;</span>
+              <span class="o">&lt;</span>button className="destroy" onClick={<span class="k">this</span>._onDestroyClick} <span class="o">/&gt;</span>
+          <span class="o">&lt;/</span>div<span class="o">&gt;</span>
+      <span class="o">&lt;/</span>li<span class="o">&gt;</span>
+    );
+  },
+</code></pre><pre><code class="language-javascript" data-lang="javascript" style="font-size: 18px;"><span class="hll">  _onToggleComplete<span class="o">:</span> <span class="kd">function</span>() {
+    <span class="k">this</span>.props.toggleComplete(<span class="k">this</span>.props.todo.id)
+  }
+</span></code></pre></div>
+                </section>
+                <section>
+                    <div class="highlight"><pre><code class="language-javascript" data-lang="javascript" style="font-size: 18px;"><span class="c1">// MainSectionjsx
+</span>    <span class="kd">var</span> todos = todoArray.map(<span class="kd">function</span>(todo) {
+      <span class="k">return</span> <span class="o">&lt;</span>TodoItem key={todo.id} todo={todo}
+              destroy={<span class="k">this</span>._destroy}
+<span class="hll">              toggleComplete={this._toggleComplete}<span class="o">/&gt;</span>
+</span>    }, <span class="k">this</span>);
+</code></pre><pre><code class="language-javascript" data-lang="javascript" style="font-size: 18px;"><span class="hll">  _toggleComplete<span class="o">:</span> <span class="kd">function</span>(key) {
+    <span class="k">this</span>.props.toggleComplete(key);
+  }
+</span></code></pre></div>
+                </section>
+                <section>
+                    <div class="highlight"><pre><code class="language-javascript" data-lang="javascript" style="font-size: 18px;"><span class="c1">// TodoApp.jsx
+</span>  <span class="o">&lt;</span>MainSection
+    allTodos={<span class="k">this</span>.state.allTodos}
+    destroy={<span class="k">this</span>._destroy}
+<span class="hll">    toggleComplete={<span class="k">this</span>._toggleComplete} <span class="o">/&gt;</span>
+</span></code></pre><pre><code class="language-javascript" data-lang="javascript" style="font-size: 18px;"><span class="hll">    _toggleComplete<span class="o">:</span> <span class="kd">function</span>(key) {
+    todo = _todos.get(key);
+    todo.complete = !todo.complete;
+    <span class="k">this</span>.setState({
+      allTodos<span class="o">:</span> _todos
+    });
+  }
+</span></code></pre></div>
+                </section>
+                <!-- ステップ６ -->
+                <section data-transition="slide" data-background="#4d7e65" data-background-transition="zoom">
+                    <h2>ステップ６</h2>
+                    <h3>数の表示</h3>
+                </section>
+                <section data-transition="slide" data-background="#4d7e65" data-background-transition="zoom">
+                    <h3>仕様</h3>
+                    <ol>
+                        <li>complete以外のitemの数をFooterに表示</li>
+                        <li>completeの数をFooterに表示</li>
+                    </ol>
+                </section>
+                <section>
+                    <div class="highlight"><pre><code class="language-javascript" data-lang="javascript" style="font-size: 18px;"><span class="c1">// TodoApp.jsx
+</span>  <span class="o">&lt;</span>Footer
+<span class="hll">    allTodos={<span class="k">this</span>.state.allTodos} <span class="o">/&gt;</span>
+</span></code></pre></div>
+                </section>
+                <section>
+                    <div class="highlight"><pre><code class="language-javascript" data-lang="javascript" style="font-size: 18px;"><span class="c1">// Footer.jsx
+</span>  render<span class="o">:</span> <span class="kd">function</span>() {
+<span class="hll">    <span class="kd">var</span> item_count = <span class="k">this</span>.props.allTodos.size;
+    <span class="kd">var</span> completeTodos = <span class="k">this</span>.props.allTodos.filter(<span class="kd">function</span>(todo) {
+      <span class="k">return</span> todo.complete <span class="o">===</span> true;
+    });
+    item_count -= completeTodos.size;
+    <span class="kd">var</span> itemPhrase = (item_count > 1 ? ' items ': ' item ') + ' left';
+</span>    <span class="k">return</span> (
+      <span class="o">&lt;</span>footer id="footer"<span class="o">&gt;</span>
+<span class="hll">          <span class="o">&lt;</span>span id="todo-count"<span class="o">&gt;</span><span class="o">&lt;</span>strong<span class="o">&gt;</span>{item_count}<span class="o">&lt;/</span>strong<span class="o">&gt;</span>{itemPhrase}<span class="o">&lt;/</span>span<span class="o">&gt;</span>
+</span>          <span class="o">&lt;</span>button id="clear-completed"<span class="o">&gt;</span>
+<span class="hll">              Clear completed ({completeTodos.size})
+</span>          <span class="o">&lt;/</span>button<span class="o">&gt;</span>
+      <span class="o">&lt;/</span>footer<span class="o">&gt;</span>
+    );
+  }
+</code></pre></div>
+                </section>
+                <!-- ステップ７ -->
+                <section data-transition="slide" data-background="#4d7e65" data-background-transition="zoom">
+                    <h2>ステップ７</h2>
+                    <h3>completeの一括操作</h3>
+                </section>
+                <section data-transition="slide" data-background="#4d7e65" data-background-transition="zoom">
+                    <h3>仕様</h3>
+                    <ol>
+                        <li>all-completeで全てのcompleteを切り替える</li>
+                    </ol>
+                </section>
+                <section>
+                    <div class="highlight"><pre><code class="language-javascript" data-lang="javascript" style="font-size: 18px;"><span class="c1">// MainSection.jsx
+</span>  <span class="k">return</span> (
+    <span class="o">&lt;</span>section id="main"<span class="o">&gt;</span>
+        <span class="o">&lt;</span>input id="toggle-all" type="checkbox"
+<span class="hll">          onChange={<span class="k">this</span>._onToggleCompleteAll}
+          checked={<span class="k">this</span>.props.areAllComplete ? 'checked' : ''} <span class="o">/&gt;</span>
+</span>        <span class="o">&lt;</span>ul id="todo-list"<span class="o">&gt;</span>{todos}<span class="o">&lt;/</span>ul<span class="o">&gt;</span>
+    <span class="o">&lt;/</span>section<span class="o">&gt;</span>
+  )
+</code></pre><pre><code class="language-javascript" data-lang="javascript" style="font-size: 18px;"><span class="hll">  _onToggleCompleteAll<span class="o">:</span> <span class="kd">function</span>() {
+    <span class="k">this</span>.props.toggleCompleteAll();
+  }
+</span></code></pre></div>
+                </section>
+                <section>
+                    <div class="highlight"><pre><code class="language-javascript" data-lang="javascript" style="font-size: 18px;"><span class="c1">// TodoApp.jsx
+</span>  <span class="o">&lt;</span>MainSection
+        allTodos={<span class="k">this</span>.state.allTodos}
+<span class="hll">        areAllComplete={<span class="k">this</span>.state.areAllComplete}
+</span>        destroy={<span class="k">this</span>._destroy}
+        toggleComplete={<span class="k">this</span>._toggleComplete}
+<span class="hll">        toggleCompleteAll={<span class="k">this</span>._toggleCompleteAll}<span class="o">&gt;</span>
+</span></code></pre></div>
+                </section>
+                <section>
+                    <div class="highlight"><pre><code class="language-javascript" data-lang="javascript" style="font-size: 18px;"><span class="c1">// TodoApp.jsx
+</span><span class="hll"><span class="kd">function</span> allCompleteUpdate(value) {
+  _todos.map(<span class="kd">function</span>(todo) {
+    todo.complete = value;
+  })
+}
+</span></code></pre><pre><code class="language-javascript" data-lang="javascript" style="font-size: 18px;"><span class="hll">  _toggleCompleteAll<span class="o">:</span> <span class="kd">function</span>() {
+    _allComplete = !_allComplete
+    allCompleteUpdate(_allComplete)
+    <span class="k">this</span>._stateSetting();
+  }
+</span></code></pre></div>
+                </section>
+                <section>
+                    <div class="highlight"><pre><code class="language-javascript" data-lang="javascript" style="font-size: 18px;"><span class="c1">// TodoApp.jsx
+</span><span class="hll">  _stateSetting<span class="o">:</span> <span class="kd">function</span>() {
+    <span class="k">this</span>.setState({
+      allTodos<span class="o">:</span> _todos,
+      areAllComplete: areAllComplete()
+    });
+  },
+</span>  _onSave<span class="o">:</span> <span class="kd">function</span>(text) {
+    create(text);
+    // setStateが呼ばれるとそのComponent以下がrerenderの対象
+<span class="hll">    <span class="k">this</span>._stateSetting();
+</span>  },
+  _destroy<span class="o">:</span> <span class="kd">function</span>(key) {
+    _todos = _todos.delete(key)
+<span class="hll">    <span class="k">this</span>._stateSetting();
+</span>  },
+  _toggleComplete<span class="o">:</span> <span class="kd">function</span>(key) {
+    todo = _todos.get(key);
+    todo.complete = !todo.complete;
+<span class="hll">    <span class="k">this</span>._stateSetting();
+</span>  },
+</code></pre></div>
+                </section>
+                <section>
+                    <div class="highlight"><pre><code class="language-javascript" data-lang="javascript" style="font-size: 18px;"><span class="c1">// TodoApp.jsx
+</span><span class="hll"><span class="kd">var</span> _allComplete = false;
+
+<span class="kd">var</span> areAllComplete = <span class="kd">function</span>() {
+
+  <span class="kd">var</span> result = true;
+  _todos.forEach(<span class="kd">function</span>(todo) {
+    if (!todo.complete) {
+      result = false;
+    }
+  })
+  _allComplete = result;
+  <span class="k">return</span> result
+}
+</span></code></pre><pre><code class="language-javascript" data-lang="javascript" style="font-size: 18px;">  _stateSetting<span class="o">:</span> <span class="kd">function</span>() {
+    <span class="k">this</span>.setState({
+      allTodos<span class="o">:</span> _todos,
+<span class="hll">      areAllComplete<span class="o">:</span> areAllComplete()
+</span>    });
+  },
+</code></pre></div>
+                </section>
+                <section>
+                    <div class="highlight"><pre><code class="language-javascript" data-lang="javascript" style="font-size: 18px;"><span class="c1">// TodoItem.jsx
+</span>  <span class="k">return</span> (
+    <span class="o">&lt;</span>li className={className}<span class="o">&gt;</span>
+        <span class="o">&lt;</span>div className="view"<span class="o">&gt;</span>
+            <span class="o">&lt;</span>input className="toggle" type="checkbox"
+                    onChange={<span class="k">this</span>._onToggleComplete}
+<span class="hll">                    checked={<span class="k">this</span>.props.todo.complete} /<span class="o">&gt;</span>
+</span>            <span class="o">&lt;</span>label<span class="o">&gt;</span>{<span class="k">this</span>.props.todo.text}<span class="o">&lt;/</span>label<span class="o">&gt;</span>
+            <span class="o">&lt;</span>button className="destroy" onClick={<span class="k">this</span>._onDestroyClick} <span class="o">/&gt;</span>
+        <span class="o">&lt;/</span>div<span class="o">&gt;</span>
+    <span class="o">&lt;/</span>li<span class="o">&gt;</span>
+</code></pre></div>
+                </section>
+                <!-- ステップ８ -->
+                <section data-transition="slide" data-background="#4d7e65" data-background-transition="zoom">
+                    <h2>ステップ８</h2>
+                    <h3>Clear completed</h3>
+                </section>
+                <section data-transition="slide" data-background="#4d7e65" data-background-transition="zoom">
+                    <h3>仕様</h3>
+                    <ol>
+                        <li>completeしたものを全て削除</li>
+                        <li>completeがなければボタンを非表示</li>
+                    </ol>
+                </section>
+                <section>
+                    <div class="highlight"><pre><code class="language-javascript" data-lang="javascript" style="font-size: 18px;"><span class="c1">// Footer.jsx
+    // all completed: completeが無い場合は表示しません。
+</span><span class="hll">    <span class="kd">var</span> allClearCompletedButton;
+    if (completeTodos.size > 0) {
+      allClearCompletedButton =
+        <span class="o">&lt;</span>button id="clear-completed"
+                onClick={<span class="k">this</span>._onClearCompletedClick}<span class="o">&gt;</span>
+          Clear completed ({completeTodos.size})
+        <span class="o">&lt;/</span>button<span class="o">&gt;</span>
+    }
+</span>
+    <span class="k">return</span> (
+      <span class="o">&lt;</span>footer id="footer"<span class="o">&gt;</span>
+          <span class="o">&lt;</span>span id="todo-count"<span class="o">&gt;</span><span class="o">&lt;</span>strong<span class="o">&gt;</span>{item_count}<span class="o">&lt;/</span>strong<span class="o">&gt;</span>{itemPhrase}<span class="o">&lt;/</span>span<span class="o">&gt;</span>
+<span class="hll">          {allClearCompletedButton}
+</span>      <span class="o">&lt;/</span>footer<span class="o">&gt;</span>
+    );
+  },
+
+<span class="hll">  _onClearCompletedClick<span class="o">:</span> <span class="kd">function</span>() {
+    <span class="k">this</span>.props.destroyCompleted();
+  }
+</span></code></pre></div>
+                </section>
+                <section>
+                    <div class="highlight"><pre><code class="language-javascript" data-lang="javascript" style="font-size: 18px;"><span class="c1">// TodoApp.jsx
+</span>  <span class="o">&lt;</span>Footer
+    allTodos={<span class="k">this</span>.state.allTodos}
+<span class="hll">    destroyCompleted={<span class="k">this</span>._destroyCompleted} <span class="o">/&gt;</span>
+</span></code></pre><pre><code class="language-javascript" data-lang="javascript" style="font-size: 18px;"><span class="hll">  _destroyCompleted<span class="o">:</span> <span class="kd">function</span>() {
+    _todos = _todos.filter(<span class="kd">function</span>(todo) {
+      <span class="k">return</span> !todo.complete;
+    }).toOrderedMap()
+    <span class="k">this</span>._stateSetting();
+  }
+</span></code></pre></div>
+                </section>
+                <!-- Last ステップ -->
+                <section data-transition="slide" data-background="#4d7e65" data-background-transition="zoom">
+                    <h2>ステップ９</h2>
+                    <h3>TodoItemの編集</h3>
+                </section>
+                <section data-transition="slide" data-background="#4d7e65" data-background-transition="zoom">
+                    <h3>仕様</h3>
+                    <ol>
+                        <li>itemをダブルクリックして編集フィールドを表示</li>
+                        <li>フィールドでEnterして保存</li>
+                    </ol>
+                </section>
+                <section>
+                    <p>まずはダブルクリックでitemの非表示</p>
+                    <div class="highlight"><pre><code class="language-javascript" data-lang="javascript" style="font-size: 18px;"><span class="c1">// TodoItem.jsx
+</span><span class="hll">  getInitialState<span class="o">:</span> <span class="kd">function</span>() {
+    <span class="k">return</span> {
+      isEditing: false
+    };
+  },
+</span></code></pre><pre><code class="language-javascript" data-lang="javascript" style="font-size: 18px;"><span class="hll">    <span class="kd">var</span> className = todo.complete ? 'completed' : '';
+    className = <span class="k">this</span>.state.isEditing ? 'editing' : className;
+</span></code></pre><pre><code class="language-javascript" data-lang="javascript" style="font-size: 18px;"><span class="hll">  <span class="o">&lt;</span>label onDoubleClick={<span class="k">this</span>._onDoubleClick}<span class="o">&gt;</span>
+</span>      {<span class="k">this</span>.props.todo.text}
+  <span class="o">&lt;/</span>label<span class="o">&gt;</span>
+</code></pre><pre><code class="language-javascript" data-lang="javascript" style="font-size: 18px;"><span class="hll">  _onDoubleClick<span class="o">:</span> <span class="kd">function</span>() {
+    if (!<span class="k">this</span>.props.todo.complete) {
+      <span class="k">this</span>.setState({isEditing: true});
+    }
+  }
+</span></code></pre></div>
+                </section>
+                <section>
+                    <p>ダブルクリックで編集フィールドを表示</p>
+                    <div class="highlight"><pre><code class="language-javascript" data-lang="javascript" style="font-size: 18px;"><span class="c1">// TodoItem.jsx
+</span><span class="hll"><span class="kd">var</span> TodoTextInput = require('./TodoTextInput.jsx');
+</span></code></pre><pre><code class="language-javascript" data-lang="javascript" style="font-size: 18px;">  render<span class="o">:</span> <span class="kd">function</span>() {
+    <span class="kd">var</span> todo = <span class="k">this</span>.props.todo;
+
+<span class="hll">    <span class="kd">var</span> input;
+    if (<span class="k">this</span>.state.isEditing) {
+      input =
+        <span class="o">&lt;</span>TodoTextInput
+          className="edit"
+          value={todo.text}
+        <span class="o">/&gt;</span>;
+    }
+</span></code></pre><pre><code class="language-javascript" data-lang="javascript" style="font-size: 18px;">              <span class="o">&lt;</span>label onDoubleClick={<span class="k">this</span>._onDoubleClick}<span class="o">&gt;</span>
+                  {<span class="k">this</span>.props.todo.text}
+              <span class="o">&lt;</span>/label<span class="o">&gt;</span>
+              <span class="o">&lt;</span>button className="destroy" onClick={<span class="k">this</span>._onDestroyClick} <span class="o">/&gt;</span>
+          <span class="o">&lt;/</span>div<span class="o">&gt;</span>
+<span class="hll">          {input}
+</span>      <span class="o">&lt;/</span>li<span class="o">&gt;</span>
+    );
+</code></pre></div>
+                </section>
+                <section>
+                    <p>編集フィールド追加</p>
+                    <small>TodoTextInput.jsxファイルを追加後</small>
+                    <div class="highlight"><pre><code class="language-javascript" data-lang="javascript" style="font-size: 18px;"><span class="c1">// TodoTextInput.jsx
+</span><span class="kd">var</span> React = require('react');
+
+<span class="kd">var</span> TodoTextInput = React.createClass({
+  getInitialState<span class="o">:</span> <span class="kd">function</span>() {
+    <span class="k">return</span> {
+      value: <span class="k">this</span>.props.value || ''
+    };
+  },
+
+  render<span class="o">:</span> <span class="kd">function</span>() {
+    <span class="k">return</span> (
+      <span class="o"><span class="o">&lt;</span></span>input
+        className={<span class="k">this</span>.props.className}
+        value={<span class="k">this</span>.state.value}
+        autoFocus={true}
+      <span class="o">/&gt;</span>
+    );
+  }
+
+});
+module.exports = TodoTextInput;
+</code></pre></div>
+                </section>
+                <section><p>ダブルクリックで編集フィールが表示されるようになりましたか？</p></section>
+                <section>
+                    <p>編集したものを保存①</p>
+                    <div class="highlight"><pre><code class="language-javascript" data-lang="javascript" style="font-size: 18px;"><span class="c1">// TodoTextInput.jsx
+</span><span class="kd">var</span> React = require('react');
+
+<span class="hll"><span class="kd">var</span> ENTER_KEY_CODE = 13;
+</span></code></pre>
+<pre><code class="language-javascript" data-lang="javascript" style="font-size: 18px;"><span class="c1">// TodoTextInput.jsx
+</span>  render<span class="o">:</span> <span class="kd">function</span>() {
+    <span class="k">return</span> (
+      <span class="o">&lt;</span>input
+        className={<span class="k">this</span>.props.className}
+<span class="hll">        onBlur={<span class="k">this</span>._save}
+        onChange={<span class="k">this</span>._onChange}
+        onKeyDown={<span class="k">this</span>._onKeyDown}
+</span>        value={<span class="k">this</span>.state.value}
+        autoFocus={true}
+      <span class="o">/&gt;</span>
+    );
+  },
+</span></code></pre></div>
+                </section>
+                <section>
+                    <p>編集したものを保存②</p>
+                    <div class="highlight"><pre><code class="language-javascript" data-lang="javascript" style="font-size: 18px;"><span class="c1">// TodoTextInput.jsx
+</span><span class="hll">  _save<span class="o">:</span> <span class="kd">function</span>() {
+    <span class="k">this</span>.props.onSave(<span class="k">this</span>.state.value);
+    <span class="k">this</span>.setState({
+      value: ''
+    });
+  },
+
+  _onChange<span class="o">:</span> <span class="kd">function</span>(event) {
+    <span class="k">this</span>.setState({
+      value: event.target.value
+    });
+  },
+
+  _onKeyDown<span class="o">:</span> <span class="kd">function</span>(event) {
+    if (event.keyCode <span class="o">===</span> ENTER_KEY_CODE) {
+      <span class="k">this</span>._save();
+    }
+  }
+</span></code></pre></div>
+                </section>
+                <section>
+                    <p>編集したものを保存③</p>
+                    <div class="highlight"><pre><code class="language-javascript" data-lang="javascript" style="font-size: 18px;"><span class="c1">// TodoItem.jsx
+</span>    <span class="kd">var</span> input;
+    if (<span class="k">this</span>.state.isEditing) {
+      input =
+        <span class="o">&lt;</span>TodoTextInput
+          className="edit"
+<span class="hll">          onSave={<span class="k">this</span>._onSave}
+</span>          value={todo.text}
+        <span class="o">/&gt;</span>;
+    }
+</code></pre>
+<pre><code class="language-javascript" data-lang="javascript" style="font-size: 18px;"><span class="c1">// TodoItem.jsx
+</span><span class="hll">
+  _onSave<span class="o">:</span> <span class="kd">function</span>(text) {
+   if (text <span class="o">!==</span> '') {
+      <span class="k">this</span>.props.onSaveByKey(<span class="k">this</span>.props.todo.id, text);
+    }
+    <span class="k">this</span>.setState({isEditing<span class="o">:</span> false});
+  }
+</span></code></pre></div>
+                </section>
+                <section>
+                    <p>編集したものを保存④</p>
+                    <div class="highlight"><pre><code class="language-javascript" data-lang="javascript" style="font-size: 18px;"><span class="c1">// MainSection.jsx
+</span>      return <span class="o">&lt;</span>TodoItem key={todo.id} todo={todo}
+              destory={this._destory}
+              toggleComplete={this._toggleComplete}
+<span class="hll">              onSaveByKey={this._onSaveByKey} <span class="o">/&gt;</span>
+</span></code></pre>
+<pre><code class="language-javascript" data-lang="javascript" style="font-size: 18px;"><span class="hll">  _onSaveByKey<span class="o">:</span> <span class="kd">function</span>(key, text) {
+    <span class="k">this</span>.props.onSaveByKey(key, text)
+  }
+</span></code></pre></div>
+                </section>
+                <section>
+                    <p>編集したものを保存⑤</p>
+                    <div class="highlight"><pre><code class="language-javascript" data-lang="javascript" style="font-size: 18px;"><span class="c1">// TodoApp.jsx
+</span><span class="hll"><span class="kd">function</span> updateByKey (key, text) {
+  todo = _todos.get(key);
+  todo.text = text;
+}
+</span></code></code></pre><pre><code class="language-javascript" data-lang="javascript" style="font-size: 18px;">  <span class="o">&lt;</span>MainSection
+    allTodos={<span class="k">this</span>.state.allTodos}
+    areAllComplete={<span class="k">this</span>.state.areAllComplete}
+    destroy={<span class="k">this</span>._destroy}
+    toggleComplete={<span class="k">this</span>._toggleComplete}
+    toggleCompleteAll={<span class="k">this</span>._toggleCompleteAll}
+<span class="hll">    onSaveByKey={<span class="k">this</span>._onSaveByKey} <span class="o">/&gt;</span>
+</span></code></pre><pre><code class="language-javascript" data-lang="javascript" style="font-size: 18px;"><span class="hll">  _onSaveByKey<span class="o">:</span> <span class="kd">function</span>(key, text) {
+    updateByKey(key, text);
+    <span class="k">this</span>._stateSetting();
+  }
+</span></code></pre></div>
+                </section>
+                <section><p>以上です。</p></section>
+            </section>
+
+        </div>
+    </div>
+    <!-- <script src="lib/js/head.min.js"></script> -->
+    <script src="js/reveal.js"></script>
+    <script>
+    Reveal.initialize({
+        controls: true,
+        progress: true,
+        history: true,
+        center: true
+    });
+    </script>
+</body>
+
+</html>
